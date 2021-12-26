@@ -6,7 +6,7 @@ import requests
 class Bot:
     """A simple class to ease bot access"""
 
-    def __init__(self, url, log=None):
+    def __init__(self, url, log = None):
         """
         url: bot endpoint\n
         log: bot log filepath
@@ -20,8 +20,7 @@ class Bot:
 
     def log(self, text):
         if self.log is None:
-            raise Exception(
-                "Log file unspecified, use set_log(filepath) to specify log file path")
+            raise Exception("Log file unspecified, use set_log(filepath) to specify log file path")
         with open(self.log, "a") as l:
             l.write(text + "\n")
 
@@ -36,6 +35,9 @@ class Bot:
 
         r = requests.get(self.url + "sendMessage", params=prms)
         return r
+
+    def send_message_faf(self):
+        pass
 
     def send_photo(
         self,
@@ -95,12 +97,15 @@ class Bot:
 if __name__ == "__main__":
     print("Debug version detected, diagnostics ahead...")
 
+    API_KEY = None # Your bot id
+    CHAT_ID = None # Chat/user to send a message to
+
     bot = Bot(
-        "https://api.telegram.org/bot{API_KEY}/", "log.txt")
+        f"https://api.telegram.org/bot{API_KEY}/")
 
     print("Sending a msg \"Test\"")
 
-    msg = bot.sendMessage("{CHAT_ID}", "Test")
+    msg = bot.send_message(CHAT_ID, "Test")
     print(msg)
 
     print()
@@ -109,10 +114,10 @@ if __name__ == "__main__":
     msg_id = msg.json()["result"]["message_id"]
     print("Editing text of msg:")
     print(msg_id)
-    print(bot.editMessageText("{CHAT_ID}", msg_id, "BLAUBLALBAB"))
+    print(bot.editMessageText(CHAT_ID, msg_id, "BLAUBLALBAB"))
 
     print("Sending a photo of a doggo")
 
-    msg = bot.sendPhoto(
-        "{CHAT_ID}", "https://random.dog/a8a8f713-2afc-4f9b-8bee-67ad244e789d.jpg", "Test doggo")
+    msg = bot.send_photo(
+        CHAT_ID, "https://random.dog/a8a8f713-2afc-4f9b-8bee-67ad244e789d.jpg", "Test doggo")
     print(msg)
